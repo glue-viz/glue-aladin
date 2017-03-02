@@ -15,7 +15,7 @@ with open('README.rst') as infile:
 with open('glue_aladin/version.py') as infile:
     exec(infile.read())
 
-setup(name='myplugin',
+setup(name='glue-aladin',
       version=__version__,
       description='My example plugin',
       long_description=LONG_DESCRIPTION,
