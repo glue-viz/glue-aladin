@@ -32,5 +32,16 @@ class AladinLiteViewer(DataViewer):
 
         return True
 
+    def add_subset(self, subset):
+
+        if subset in self._layer_artist_container:
+            return
+
+        layer_artist = AladinLiteLayer(layer=subset,
+                                       aladin_widget=self.aladin_widget,
+                                       viewer_state=self.state)
+
+        self._layer_artist_container.append(layer_artist)
+
     def options_widget(self):
         return self._options_widget
