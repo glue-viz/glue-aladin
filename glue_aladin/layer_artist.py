@@ -4,6 +4,7 @@ from glue.core.layer_artist import LayerArtistBase
 from glue.core.exceptions import IncompatibleAttribute
 from glue.utils import nonpartial
 from glue_aladin.layer_state import AladinLiteLayerState
+from glue_aladin.utils import color_to_hex
 
 __all__ = ['AladinLiteLayer']
 
@@ -52,13 +53,12 @@ class AladinLiteLayer(LayerArtistBase):
         # self.layer_state.color
 
         # create javascript to add associated sources
-        color = 'red' # TODO: retrieve color from self.layer_state
-        js = "var cat = A.catalog({color: '%s'});\n" % (color)
+        js = "var cat = A.catalog({color: '%s'});\n" % (color_to_hex(self.layer_state.color))
         js += "aladin.addCatalog(cat);\n"
         js += "var sources = [];\n"
         for k in range(0, len(ra)):
             js += "sources.push(A.source(%f, %f));\n" % (ra[k], dec[k]);
-           
+
         js += "cat.addSources(sources);"
         self.aladin_widget.run_js(js)
 
