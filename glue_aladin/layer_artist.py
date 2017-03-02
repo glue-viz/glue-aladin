@@ -17,6 +17,8 @@ class AladinLiteLayer(LayerArtistBase):
         self.viewer_state.add_callback('ra_att', nonpartial(self.update))
         self.viewer_state.add_callback('dec_att', nonpartial(self.update))
         self.layer_state = AladinLiteLayerState(layer=layer)
+        self.layer_state.add_callback('color', nonpartial(self.update))
+        self.layer_state.add_callback('alpha', nonpartial(self.update))
         self.viewer_state.layers.append(self.layer_state)
 
     @property
@@ -29,8 +31,8 @@ class AladinLiteLayer(LayerArtistBase):
         self.update()
 
     def clear(self):
-        # TODO: Here we need to write javascript to remove markers associated with this layer
-        js = ""
+        # TODO: need to find a smart way to remove *only* the needed catalog layer and not everything!
+        js = "aladin.view.removeLayers();"
         self.aladin_widget.run_js(js)
 
     def update(self, view=None):
@@ -47,8 +49,17 @@ class AladinLiteLayer(LayerArtistBase):
             print("Cannot fetch attributes %s and %s" % (self.viewer_state.ra_att, self.viewer_state.dec_att))
             return
 
-        # TODO: Here we need to write javascript to add the markers associated with this layer
-        js = ""
+        # self.layer_state.color
+
+        # create javascript to add associated sources
+        color = 'red' # TODO: retrieve color from self.layer_state
+        js = "var cat = A.catalog({color: '%s'});\n" % (color)
+        js += "aladin.addCatalog(cat);\n"
+        js += "var sources = [];\n"
+        for k in range(0, len(ra)):
+            js += "sources.push(A.source(%f, %f));\n" % (ra[k], dec[k]);
+           
+        js += "cat.addSources(sources);"
         self.aladin_widget.run_js(js)
 
     def redraw(self):
