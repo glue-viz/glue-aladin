@@ -23,6 +23,6 @@ setup(name='glue-aladin',
       author='',
       author_email='',
       packages=find_packages(),
-      package_data={},
+      package_data={'glue_aladin':['*.ui']},
       entry_points=entry_points
     )
