@@ -1,4 +1,4 @@
-Experimental Glue plugin for Aladin Lite
+Experimental glue plugin for Aladin Lite
 ========================================
 
 |Travis Status| |AppVeyor Status| |Coverage Status|
