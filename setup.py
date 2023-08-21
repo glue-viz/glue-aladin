@@ -1,28 +1,16 @@
 #!/usr/bin/env python
-
 from __future__ import print_function
 
-from setuptools import setup, find_packages
+import sys
+from distutils.version import LooseVersion
 
-entry_points = """
-[glue.plugins]
-aladin=glue_aladin:setup
-"""
+try:
+    import setuptools
+    assert LooseVersion(setuptools.__version__) >= LooseVersion('30.3')
+except (ImportError, AssertionError):
+    sys.stderr.write("ERROR: setuptools 30.3 or later is required\n")
+    sys.exit(1)
 
-with open('README.rst') as infile:
-    LONG_DESCRIPTION = infile.read()
+from setuptools import setup
 
-with open('glue_aladin/version.py') as infile:
-    exec(infile.read())
-
-setup(name='glue-aladin',
-      version=__version__,
-      description='My example plugin',
-      long_description=LONG_DESCRIPTION,
-      url="https://github.com/glue-viz/glue-plugin-template",
-      author='',
-      author_email='',
-      packages=find_packages(),
-      package_data={'glue_aladin':['*.ui']},
-      entry_points=entry_points
-    )
+setup(use_scm_version=True)
