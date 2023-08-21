@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>WWT</class>
- <widget class="QWidget" name="WWT">
+ <class>AladinLite</class>
+ <widget class="QWidget" name="AladinLite">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -21,7 +21,7 @@
     <number>4</number>
    </property>
    <item row="0" column="1">
-    <widget class="QComboBox" name="combodata_ra_att"/>
+    <widget class="QComboBox" name="combosel_ra_att"/>
    </item>
    <item row="1" column="0">
     <widget class="QLabel" name="label_4">
@@ -31,7 +31,7 @@
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="QComboBox" name="combodata_dec_att"/>
+    <widget class="QComboBox" name="combosel_dec_att"/>
    </item>
    <item row="0" column="0">
     <widget class="QLabel" name="label_3">

@@ -1,6 +1,6 @@
-from glue.viewers.common.qt.data_viewer import DataViewer
-from glue.viewers.common.qt.toolbar import BasicToolbar
 from glue.core import message as msg
+from glue_qt.viewers.common.data_viewer import DataViewer
+from glue_qt.viewers.common.toolbar import BasicToolbar
 
 from glue_aladin.aladin_lite import AladinLiteQtWidget
 from glue_aladin.viewer_state import AladinLiteState
