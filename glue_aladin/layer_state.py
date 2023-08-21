@@ -1,14 +1,11 @@
 from __future__ import absolute_import, division, print_function
 
-from glue.core.state_objects import State
-from glue.external.echo import CallbackProperty, keep_in_sync
+from glue.viewers.common.state import LayerState
+from echo import CallbackProperty, keep_in_sync
 
 
-class AladinLiteLayerState(State):
+class AladinLiteLayerState(LayerState):
 
-    layer = CallbackProperty()
-    visible = CallbackProperty(True)
-    zorder = CallbackProperty(0)
     color = CallbackProperty()
     alpha = CallbackProperty()
 
