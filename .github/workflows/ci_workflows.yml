@@ -1,0 +1,46 @@
+name: CI Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  tests:
+    uses: OpenAstronomy/github-actions-workflows/.github/workflows/tox.yml@v1
+    with:
+      display: true
+      coverage: codecov
+      libraries: |
+        apt:
+          - '^libxcb.*-dev'
+          - libxkbcommon-x11-dev
+
+      envs: |
+        # Code style
+        - linux: codestyle
+
+        # Standard tests
+        - linux: py37-test
+        - linux: py38-test
+        - linux: py39-test
+        - linux: py310-test
+
+        - macos: py37-test
+        - macos: py38-test
+        - macos: py39-test
+        - macos: py310-test
+
+        - windows: py37-test
+        - windows: py38-test
+        - windows: py39-test
+        - windows: py310-test
+
+  publish:
+    uses: OpenAstronomy/github-actions-workflows/.github/workflows/publish_pure_python.yml@v1
+    with:
+      # setup headless X server as per pyvista/setup-headless-display-action@v1
+      libraries: '^libxcb.*-dev libxkbcommon-x11-dev xvfb'
+      test_extras: 'test,qt'
+      test_command: Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 & sleep 3; DISPLAY=:99.0 pytest --pyargs glue_aladin
+    secrets:
+      pypi_token: ${{ secrets.pypi_token }}
