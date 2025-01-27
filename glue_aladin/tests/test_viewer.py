@@ -1,6 +1,5 @@
-from glue.app.qt import GlueApplication
+from glue_qt.app import GlueApplication
 from glue.core import Data
-from glue.core.tests.test_state import clone
 
 from ..data_viewer import AladinLiteViewer
 
