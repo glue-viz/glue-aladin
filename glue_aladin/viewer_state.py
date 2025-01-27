@@ -21,7 +21,7 @@ class AladinLiteState(ViewerState):
         self._dec_att_helpers = ComponentIDComboHelper(self, 'dec_att',
                                                        categorical=False)
 
-        self.add_callback('layers', self._layers_changed)
+        self._layers_changed()
 
     def _layers_changed(self, *args):
 
