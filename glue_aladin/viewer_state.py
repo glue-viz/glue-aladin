@@ -1,7 +1,7 @@
 from glue.viewers.common.state import ViewerState
 from glue.core.data_combo_helper import ComponentIDComboHelper
 
-from echo import SelectionCallbackProperty, ListCallbackProperty
+from echo import SelectionCallbackProperty
 
 
 class AladinLiteState(ViewerState):

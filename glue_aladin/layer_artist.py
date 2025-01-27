@@ -57,7 +57,7 @@ class AladinLiteLayer(LayerArtistBase):
         js += "aladin.addCatalog(cat);\n"
         js += "var sources = [];\n"
         for k in range(0, len(ra)):
-            js += "sources.push(A.source(%f, %f));\n" % (ra[k], dec[k]);
+            js += "sources.push(A.source(%f, %f));\n" % (ra[k], dec[k])
 
         js += "cat.addSources(sources);"
         self.aladin_widget.run_js(js)

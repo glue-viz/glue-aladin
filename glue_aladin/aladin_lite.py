@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-import sys
-
 from qtpy.QtWebEngineWidgets import QWebEngineView
 from qtpy.QtWidgets import QWidget, QVBoxLayout
 
@@ -13,7 +11,8 @@ ALADIN_LITE_HTML = """
 </head>
 <body>
 <div id="aladin-lite-div"></div>
-<script type="text/javascript" src="http://aladin.u-strasbg.fr/AladinLite/api/v2/latest/aladin.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="http://aladin.u-strasbg.fr/AladinLite/api/v2/latest/aladin.min.js" charset="utf-8">
+</script>
 <script type="text/javascript">
     var aladin = A.aladin('#aladin-lite-div', {survey: "P/DSS2/color", fov:60});
 </script>
@@ -34,5 +33,5 @@ class AladinLiteQtWidget(QWidget):
         self.page = web.page()
 
     def run_js(self, js):
-        print("Running javascript: " + js)
+        # print("Running javascript: " + js)
         self.page.runJavaScript(js)
