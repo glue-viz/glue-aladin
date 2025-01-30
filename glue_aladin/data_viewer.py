@@ -1,8 +1,10 @@
+from echo import add_callback
 from glue.core import message as msg
 from glue_qt.viewers.common.data_viewer import DataViewer
 from glue_qt.viewers.common.toolbar import BasicToolbar
 
 from glue_aladin.aladin_lite import AladinLiteQtWidget
+from glue_aladin.catalog_layer_widget import AladinLiteCatalogOptionsPanel
 from glue_aladin.viewer_state import AladinLiteState
 from glue_aladin.options_widget import AladinLiteOptionsPanel
 from glue_aladin.layer_artist import AladinLiteLayer
@@ -19,6 +21,13 @@ class AladinLiteViewer(DataViewer):
         self.setCentralWidget(self.aladin_widget)
         self.state = AladinLiteState()
         self._options_widget = AladinLiteOptionsPanel(parent=self, viewer_state=self.state)
+
+        add_callback(self.state, 'projection', self._update_projection)
+        add_callback(self.state, 'reticle', self._update_reticle)
+        add_callback(self.state, 'reticle_color', self._update_reticle_color)
+        add_callback(self.state, 'coordinate_grid', self._update_coordinate_grid)
+        add_callback(self.state, 'coordinate_frame', self._update_coordinate_frame)
+        add_callback(self.state, 'coordinate_grid_color', self._update_coordinate_grid_color)
 
     def add_data(self, data):
 
@@ -81,3 +90,25 @@ class AladinLiteViewer(DataViewer):
         hub.subscribe(self, msg.SubsetDeleteMessage,
                       handler=self._remove_subset,
                       filter=subset_has_data)
+
+    def _bool_js_string(self, boolean):
+        return str(boolean).lower()
+
+    def _update_projection(self, projection):
+        self.aladin_widget.run_js(f"aladin.setProjection('{projection}')")
+
+    def _update_reticle(self, reticle):
+        self.aladin_widget.run_js(f"aladin.showReticle({self._bool_js_string(reticle)})")
+
+    def _update_reticle_color(self, color):
+        self.aladin_widget.run_js(f"aladin.reticle.update({{color: '{color}'}})")
+
+    def _update_coordinate_grid(self, grid):
+        prefix = "show" if grid else "hide"
+        self.aladin_widget.run_js(f"aladin.{prefix}CooGrid()")
+
+    def _update_coordinate_frame(self, frame):
+        self.aladin_widget.run_js(f"aladin.setFrame('{frame}')")
+
+    def _update_coordinate_grid_color(self, color):
+        self.aladin_widget.run_js(f"aladin.setCooGrid({{color: '{color}'}})")

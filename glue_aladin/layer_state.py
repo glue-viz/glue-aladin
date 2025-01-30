@@ -1,13 +1,15 @@
 from __future__ import absolute_import, division, print_function
 
 from glue.viewers.common.state import LayerState
-from echo import CallbackProperty, keep_in_sync
+from echo import CallbackProperty, SelectionCallbackProperty, keep_in_sync
 
 
 class AladinLiteLayerState(LayerState):
 
     color = CallbackProperty()
     alpha = CallbackProperty()
+    size = CallbackProperty()
+    shape = SelectionCallbackProperty(default_index=0)
 
     def __init__(self, **kwargs):
 
@@ -15,6 +17,8 @@ class AladinLiteLayerState(LayerState):
 
         self._sync_color = None
         self._sync_alpha = None
+
+        AladinLiteLayerState.shape.set_choices(self, ["square", "circle", "plus", "rhomb", "cross", "triangle"])
 
         self.add_callback('layer', self._layer_changed)
         self._layer_changed()

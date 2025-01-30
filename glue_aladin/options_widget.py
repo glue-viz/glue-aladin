@@ -11,11 +11,9 @@ __all__ = ['AladinLiteOptionsPanel']
 
 class AladinLiteOptionsPanel(QtWidgets.QWidget):
 
-    def __init__(self, parent=None, viewer_state=None):
+    def __init__(self, parent=None, viewer_state=None, session=None):
 
         super(AladinLiteOptionsPanel, self).__init__(parent=parent)
-
-        self._data_collection = self.parent()._data
 
         self.viewer_state = viewer_state
 

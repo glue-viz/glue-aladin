@@ -1,8 +1,13 @@
 from __future__ import absolute_import, division, print_function
 
+from uuid import uuid4
+from echo import CallbackProperty
+
 from glue.core.layer_artist import LayerArtistBase
 from glue.core.exceptions import IncompatibleAttribute
 from glue.utils import nonpartial
+from glue.viewers.common.layer_artist import LayerArtist
+
 from glue_aladin.layer_state import AladinLiteLayerState
 from glue_aladin.utils import color_to_hex
 
@@ -11,16 +16,19 @@ __all__ = ['AladinLiteLayer']
 
 class AladinLiteLayer(LayerArtistBase):
 
+    _layer_state_cls = AladinLiteLayerState
+
     def __init__(self, layer, aladin_widget, viewer_state):
+        self._id = uuid4().hex
         super(AladinLiteLayer, self).__init__(layer)
         self.aladin_widget = aladin_widget
         self.viewer_state = viewer_state
         self.viewer_state.add_callback('ra_att', nonpartial(self.update))
         self.viewer_state.add_callback('dec_att', nonpartial(self.update))
-        self.layer_state = AladinLiteLayerState(layer=layer)
-        self.layer_state.add_callback('color', nonpartial(self.update))
-        self.layer_state.add_callback('alpha', nonpartial(self.update))
-        self.viewer_state.layers.append(self.layer_state)
+        self.state = AladinLiteLayerState(layer=layer)
+        self.state.add_callback('color', nonpartial(self.update))
+        self.state.add_callback('alpha', nonpartial(self.update))
+        self.viewer_state.layers.append(self.state)
 
     @property
     def visible(self):
@@ -31,9 +39,13 @@ class AladinLiteLayer(LayerArtistBase):
         self._visible = value
         self.update()
 
+    @property
+    def catalog_var(self):
+        return f"cat_{self._id}"
+
     def clear(self):
         # TODO: need to find a smart way to remove *only* the needed catalog layer and not everything!
-        js = "aladin.view.removeLayers();"
+        js = f"aladin.view.removeLayer({self.catalog_var});"
         self.aladin_widget.run_js(js)
 
     def update(self, view=None):
@@ -53,13 +65,13 @@ class AladinLiteLayer(LayerArtistBase):
         # self.layer_state.color
 
         # create javascript to add associated sources
-        js = "var cat = A.catalog({color: '%s'});\n" % (color_to_hex(self.layer_state.color))
-        js += "aladin.addCatalog(cat);\n"
+        js = f"var {self.catalog_var} = A.catalog({{color: '%s'}});\n" % (color_to_hex(self.state.color))
+        js += f"aladin.addCatalog({self.catalog_var});\n"
         js += "var sources = [];\n"
         for k in range(0, len(ra)):
             js += "sources.push(A.source(%f, %f));\n" % (ra[k], dec[k])
 
-        js += "cat.addSources(sources);"
+        js += f"{self.catalog_var}.addSources(sources);"
         self.aladin_widget.run_js(js)
 
     def redraw(self):
