@@ -8,7 +8,7 @@ class AladinLiteLayerState(LayerState):
 
     color = CallbackProperty()
     alpha = CallbackProperty()
-    size = CallbackProperty()
+    size = CallbackProperty(8)
     shape = SelectionCallbackProperty(default_index=0)
 
     def __init__(self, **kwargs):

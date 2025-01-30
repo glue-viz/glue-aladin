@@ -14,6 +14,7 @@ class AladinLiteViewer(DataViewer):
 
     LABEL = "Aladin Lite Viewer"
     _toolbar_cls = BasicToolbar
+    _layer_style_widget_cls = AladinLiteCatalogOptionsPanel
 
     def __init__(self, session, parent=None):
         super(AladinLiteViewer, self).__init__(session, parent=parent)

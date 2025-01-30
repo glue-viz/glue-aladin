@@ -32,7 +32,7 @@
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="QComboBox" name="comboBox"/>
+    <widget class="QComboBox" name="combosel_shape"/>
    </item>
   </layout>
  </widget>

@@ -26,8 +26,10 @@ class AladinLiteLayer(LayerArtistBase):
         self.viewer_state.add_callback('ra_att', nonpartial(self.update))
         self.viewer_state.add_callback('dec_att', nonpartial(self.update))
         self.state = AladinLiteLayerState(layer=layer)
-        self.state.add_callback('color', nonpartial(self.update))
-        self.state.add_callback('alpha', nonpartial(self.update))
+        self.state.add_callback('color', self._update_color)
+        self.state.add_callback('alpha', self._update_color)
+        self.state.add_callback('shape', self._update_shape)
+        self.state.add_callback('size', self._update_size)
         self.viewer_state.layers.append(self.state)
 
     @property
@@ -43,9 +45,17 @@ class AladinLiteLayer(LayerArtistBase):
     def catalog_var(self):
         return f"cat_{self._id}"
 
+    def _update_color(self, color):
+        self.aladin_widget.run_js(f"{self.catalog_var}.updateShape({{ color: '{color}' }})")
+
+    def _update_shape(self, shape):
+        self.aladin_widget.run_js(f"{self.catalog_var}.updateShape({{ shape: '{shape}' }})")
+
+    def _update_size(self, size):
+        self.aladin_widget.run_js(f"{self.catalog_var}.updateShape({{ sourceSize: {size} }})")
+
     def clear(self):
-        # TODO: need to find a smart way to remove *only* the needed catalog layer and not everything!
-        js = f"aladin.view.removeLayer({self.catalog_var});"
+        js = f"{self.catalog_var}.removeAll()"
         self.aladin_widget.run_js(js)
 
     def update(self, view=None):

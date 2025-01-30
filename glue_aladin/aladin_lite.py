@@ -62,8 +62,8 @@ class AladinLiteQtWidget(QWidget):
         self.page = web.page()
 
     def run_js(self, js, callback=None):
-        # print("Running javascript: " + js)
-        js = f"aladinPromise.then(() => {{ {js} }})"
+        print("Running javascript: " + js)
+        # js = f"window.aladinPromise.then(() => {{ {js} }})"
         if callback:
             self.page.runJavaScript(js, 0, callback)
         else:
