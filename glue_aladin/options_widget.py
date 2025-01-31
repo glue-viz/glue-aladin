@@ -21,3 +21,15 @@ class AladinLiteOptionsPanel(QtWidgets.QWidget):
                           directory=os.path.dirname(__file__))
 
         self._connections = autoconnect_callbacks_to_qt(self.viewer_state, self.ui)
+
+        self.viewer_state.add_callback('coordinate_grid', self._enable_grid_color)
+        self.viewer_state.add_callback('reticle', self._enable_reticle_color)
+
+        self._enable_grid_color(self.viewer_state.coordinate_grid)
+        self._enable_reticle_color(self.viewer_state.reticle)
+
+    def _enable_grid_color(self, grid):
+        self.ui.color_coordinate_grid_color.setEnabled(grid)
+
+    def _enable_reticle_color(self, reticle):
+        self.ui.color_reticle_color.setEnabled(reticle)
