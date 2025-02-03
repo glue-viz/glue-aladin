@@ -22,4 +22,4 @@ class AladinLiteOptionsPanel(QtWidgets.QWidget):
         self.ui = load_ui('options_widget.ui', self,
                           directory=os.path.dirname(__file__))
 
-        autoconnect_callbacks_to_qt(self.viewer_state, self.ui)
+        self._connections = autoconnect_callbacks_to_qt(self.viewer_state, self.ui)

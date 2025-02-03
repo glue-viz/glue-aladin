@@ -1,7 +1,7 @@
 from glue.viewers.common.state import ViewerState
 from glue.core.data_combo_helper import ComponentIDComboHelper
 
-from echo import SelectionCallbackProperty, ListCallbackProperty
+from echo import SelectionCallbackProperty
 
 
 class AladinLiteState(ViewerState):
@@ -21,7 +21,7 @@ class AladinLiteState(ViewerState):
         self._dec_att_helpers = ComponentIDComboHelper(self, 'dec_att',
                                                        categorical=False)
 
-        self.add_callback('layers', self._layers_changed)
+        self._layers_changed()
 
     def _layers_changed(self, *args):
 
