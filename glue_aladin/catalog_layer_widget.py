@@ -17,3 +17,5 @@ class AladinLiteCatalogOptionsPanel(QWidget):
                           directory=os.path.dirname(__file__))
 
         self._connections = autoconnect_callbacks_to_qt(self.layer_state, self.ui)
+
+        self.ui.button_center.clicked.connect(layer_artist.center)

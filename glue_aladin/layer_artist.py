@@ -9,7 +9,7 @@ from glue.utils import nonpartial
 from numpy import isfinite
 
 from glue_aladin.layer_state import AladinLiteLayerState
-from glue_aladin.utils import color_to_hex
+from glue_aladin.utils import center_fov, color_to_hex
 
 __all__ = ['AladinLiteLayer']
 
@@ -58,6 +58,24 @@ class AladinLiteLayer(LayerArtistBase):
 
     def _update_size(self, size):
         self.aladin_widget.run_js(f"{self.catalog_var}.updateShape({{ sourceSize: {size} }})")
+
+    def center(self, *args):
+        lon = self.layer[self.viewer_state.ra_att]
+        lat = self.layer[self.viewer_state.dec_att]
+
+        if len(lon) == 0 or len(lat) == 0:
+            return
+
+        lon_cen, lat_cen, sep_max = center_fov(lon, lat)
+        if lon_cen is None or lat_cen is None:
+            return
+
+        fov = min(60, sep_max * 3)
+        js = f"""
+        aladin.setFov({fov});
+        aladin.gotoRaDec({lon_cen}, {lat_cen});
+        """
+        self.aladin_widget.run_js(js)
 
     def clear(self):
         js = f"{self.catalog_var}.removeAll()"
