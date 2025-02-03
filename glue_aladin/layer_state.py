@@ -9,7 +9,9 @@ class AladinLiteLayerState(LayerState):
     color = CallbackProperty()
     alpha = CallbackProperty()
     size = CallbackProperty(8)
-    shape = SelectionCallbackProperty(default_index=0)
+    shape = SelectionCallbackProperty(
+            default_index=0,
+            choices=["square", "circle", "plus", "rhomb", "cross", "triangle"])
 
     def __init__(self, **kwargs):
 
@@ -17,8 +19,6 @@ class AladinLiteLayerState(LayerState):
 
         self._sync_color = None
         self._sync_alpha = None
-
-        AladinLiteLayerState.shape.set_choices(self, ["square", "circle", "plus", "rhomb", "cross", "triangle"])
 
         self.add_callback('layer', self._layer_changed)
         self._layer_changed()

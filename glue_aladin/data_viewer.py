@@ -15,12 +15,13 @@ class AladinLiteViewer(DataViewer):
     LABEL = "Aladin Lite Viewer"
     _toolbar_cls = BasicToolbar
     _layer_style_widget_cls = AladinLiteCatalogOptionsPanel
+    _state_cls = AladinLiteState
 
-    def __init__(self, session, parent=None):
+    def __init__(self, session, state=None, parent=None):
         super(AladinLiteViewer, self).__init__(session, parent=parent)
         self.aladin_widget = AladinLiteQtWidget()
         self.setCentralWidget(self.aladin_widget)
-        self.state = AladinLiteState()
+        self.state = state or AladinLiteState()
         self._options_widget = AladinLiteOptionsPanel(parent=self, viewer_state=self.state)
 
         add_callback(self.state, 'projection', self._update_projection)
