@@ -1,12 +1,12 @@
 from __future__ import absolute_import, division, print_function
 
 from uuid import uuid4
-from echo import CallbackProperty
 
 from glue.core.layer_artist import LayerArtistBase
 from glue.core.exceptions import IncompatibleAttribute
 from glue.utils import nonpartial
-from glue.viewers.common.layer_artist import LayerArtist
+
+from numpy import isfinite
 
 from glue_aladin.layer_state import AladinLiteLayerState
 from glue_aladin.utils import color_to_hex
@@ -14,6 +14,8 @@ from glue_aladin.utils import color_to_hex
 __all__ = ['AladinLiteLayer']
 
 
+# TODO: There were issues with properties not being recognized as CallbackProperty instances
+# when inheriting from `LayerArtist`. Figure out why
 class AladinLiteLayer(LayerArtistBase):
 
     _layer_state_cls = AladinLiteLayerState
@@ -31,6 +33,9 @@ class AladinLiteLayer(LayerArtistBase):
         self.state.add_callback('shape', self._update_shape)
         self.state.add_callback('size', self._update_size)
         self.viewer_state.layers.append(self.state)
+
+    def __gluestate__(self, context):
+        return dict(state=context.id(self.state))
 
     @property
     def visible(self):
@@ -79,7 +84,8 @@ class AladinLiteLayer(LayerArtistBase):
         js += f"aladin.addCatalog({self.catalog_var});\n"
         js += "var sources = [];\n"
         for k in range(0, len(ra)):
-            js += "sources.push(A.source(%f, %f));\n" % (ra[k], dec[k])
+            if isfinite(ra[k]) and isfinite(dec[k]):
+                js += "sources.push(A.source(%f, %f));\n" % (ra[k], dec[k])
 
         js += f"{self.catalog_var}.addSources(sources);"
         self.aladin_widget.run_js(js)
