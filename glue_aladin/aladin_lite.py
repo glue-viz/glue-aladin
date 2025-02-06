@@ -59,6 +59,7 @@ class AladinLiteQtWidget(QWidget):
         web.setPage(page)
         web.setHtml(ALADIN_LITE_HTML)
         layout.addWidget(web)
+        self.web = web
         self.page = web.page()
 
     def run_js(self, js, callback=None):
