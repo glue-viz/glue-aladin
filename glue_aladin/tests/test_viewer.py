@@ -1,20 +1,11 @@
 from time import sleep
 
-from mock import MagicMock
-
 from glue_qt.app import GlueApplication
-from glue.core import Data, message
-from glue_aladin.aladin_lite import AladinLiteQtWidget
+from glue.core import Data
 
 from glue_aladin.tests.utils import assert_js_result_equals
 
 from ..data_viewer import AladinLiteViewer
-
-
-class AladinLiteViewerBlocking(AladinLiteViewer):
-
-    def _initialize_aladin(self):
-        self.aladin_widget = AladinLiteQtWidget(block_until_ready=True)
 
 
 class TestAladinLiteViewer(object):
@@ -26,7 +17,7 @@ class TestAladinLiteViewer(object):
         self.dc.append(self.d)
         self.hub = self.dc.hub
         self.session = self.application.session
-        self.viewer = self.application.new_data_viewer(AladinLiteViewerBlocking)
+        self.viewer = self.application.new_data_viewer(AladinLiteViewer)
         sleep(0.5)
 
     def teardown_method(self, method):
@@ -72,39 +63,3 @@ class TestAladinLiteViewer(object):
         assert len(self.viewer.layers) == 1
         self.viewer.add_data(self.d)
         assert len(self.viewer.layers) == 1
-
-    # def test_remove_data(self):
-    #     self.register()
-    #     self.viewer.add_data(self.d)
-    #     layer = self.viewer._layer_artist_container[self.d][0]
-
-    #     layer.clear = MagicMock()
-    #     self.hub.broadcast(message.DataCollectionDeleteMessage(self.dc,
-    #                                                            data=self.d))
-    #     assert self.d not in self.viewer._layer_artist_container
-
-    # def test_remove_subset(self):
-    #     self.register()
-    #     s = self.d.new_subset()
-    #     self.viewer.add_subset(s)
-
-    #     layer = self.viewer._layer_artist_container[s][0]
-    #     layer.clear = MagicMock()
-
-    #     self.hub.broadcast(message.SubsetDeleteMessage(s))
-
-    #     # assert layer.clear.call_count == 1
-    #     print([s for s in self.viewer._layer_artist_container])
-    #     assert s not in self.viewer._layer_artist_container
-
-    # def test_subsets_added_with_data(self):
-    #     s = self.d.new_subset()
-    #     self.viewer.add_data(self.d)
-    #     assert s in self.viewer._layer_artist_container
-
-    # def test_subsets_live_added(self):
-    #     self.register()
-    #     self.viewer.add_data(self.d)
-    #     s = self.d.new_subset()
-    #     assert s in self.viewer._layer_artist_container
-

@@ -18,7 +18,9 @@ class AladinLiteViewer(DataViewer):
     _state_cls = AladinLiteState
 
     def _initialize_aladin(self):
-        self.aladin_widget = AladinLiteQtWidget()
+        # We need to block because otherwise some of the layer artist
+        # JS commands will run before the Aladin JS setup is complete
+        self.aladin_widget = AladinLiteQtWidget(block_until_ready=True)
 
     def __init__(self, session, state=None, parent=None):
         super(AladinLiteViewer, self).__init__(session, parent=parent)
