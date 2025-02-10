@@ -11,7 +11,7 @@ class AladinLiteState(ViewerState):
     projection = SelectionCallbackProperty(default_index=2)
     reticle = CallbackProperty(False)
     reticle_color = CallbackProperty("#b2329e")
-    coordinate_grid = CallbackProperty(False) 
+    coordinate_grid = CallbackProperty(False)
     coordinate_frame = SelectionCallbackProperty(default_index=0)
     coordinate_grid_color = CallbackProperty("#b2329e")
 

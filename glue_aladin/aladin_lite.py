@@ -1,4 +1,4 @@
-from qtpy import QtWebEngineWidgets
+from qtpy import QtWebEngineWidgets  # noqa: F401
 from qtpy.QtWebEngineWidgets import QWebEnginePage, QWebEngineView
 from qtpy.QtWidgets import QWidget, QVBoxLayout
 
@@ -15,7 +15,11 @@ ALADIN_LITE_HTML = """
 <body style="margin: 0;">
 
 <div id="aladin-lite-div" style="width: 100%; height: 100%;"></div>
-<script type="text/javascript" src="https://aladin.cds.unistra.fr/AladinLite/api/v3/latest/aladin.js" charset="utf-8"></script>
+<script
+    type="text/javascript"
+    src="https://aladin.cds.unistra.fr/AladinLite/api/v3/latest/aladin.js"
+    charset="utf-8"
+></script>
 
 <script type="text/javascript">
     var aladin;
@@ -84,8 +88,6 @@ class AladinLiteQtWidget(QWidget):
                 self.run_js("aladin")
                 app.processEvents()
                 aladin = self.page._js_response
-                print(aladin)
-
 
     def run_js(self, js, callback=None):
         print("Running javascript: " + js)

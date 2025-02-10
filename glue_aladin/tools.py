@@ -11,7 +11,7 @@ class AladinShareTool(Tool):
         app = get_qapp()
         cb = app.clipboard()
         cb.clear(mode=cb.Clipboard)
-        
+
         def callback(url):
             icon = QSystemTrayIcon()
             icon.show()
