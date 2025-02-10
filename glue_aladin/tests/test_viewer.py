@@ -2,8 +2,9 @@ from time import sleep
 
 from glue_qt.app import GlueApplication
 from glue.core import Data
+from numpy import allclose
 
-from glue_aladin.tests.utils import assert_js_result_equals
+from glue_aladin.tests.utils import assert_js_result_satisfies
 
 from ..data_viewer import AladinLiteViewer
 
@@ -38,13 +39,17 @@ class TestAladinLiteViewer(object):
         self.viewer.state.ra_att = self.d.id["ra"]
         self.viewer.state.dec_att = self.d.id["dec"]
         self.viewer.layers[0].center()
-        assert_js_result_equals(
+        assert_js_result_satisfies(
             self.viewer.aladin_widget,
             "aladin.getFov()",
-            [
-                4.23994874401167,
-                3.1799615580087526,
-            ]
+            lambda result: result[0] == 4.23994874401167
+        )
+        assert_js_result_satisfies(
+            self.viewer.aladin_widget,
+            # Aladin Lite returns RA/Dec as a Float64Array
+            # This seems like the simplest way to deal with that
+            "[...aladin.getRaDec()]",
+            lambda result: allclose(result, [1.999390145878301, 3.0003040684363738])
         )
 
     def test_new_subset_group(self):
