@@ -48,13 +48,9 @@ class AladinLiteState(ViewerState):
         layers_data_cache = getattr(self, '_layers_data_cache', [])
 
         if layers_data == layers_data_cache:
-            print("Early return")
             return
 
-        print(self.layers_data)
         self._ra_att_helpers.set_multiple_data(self.layers_data)
         self._dec_att_helpers.set_multiple_data(self.layers_data)
 
         self._layers_data_cache = layers_data
-
-        print("End layers changed")
