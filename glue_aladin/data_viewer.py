@@ -17,9 +17,12 @@ class AladinLiteViewer(DataViewer):
     _layer_style_widget_cls = AladinLiteCatalogOptionsPanel
     _state_cls = AladinLiteState
 
+    def _initialize_aladin(self):
+        self.aladin_widget = AladinLiteQtWidget()
+
     def __init__(self, session, state=None, parent=None):
         super(AladinLiteViewer, self).__init__(session, parent=parent)
-        self.aladin_widget = AladinLiteQtWidget()
+        self._initialize_aladin()
         self.setCentralWidget(self.aladin_widget)
         self.state = state or AladinLiteState()
         self._options_widget = AladinLiteOptionsPanel(parent=self, viewer_state=self.state)
@@ -30,6 +33,10 @@ class AladinLiteViewer(DataViewer):
         add_callback(self.state, 'coordinate_grid', self._update_coordinate_grid)
         add_callback(self.state, 'coordinate_frame', self._update_coordinate_frame)
         add_callback(self.state, 'coordinate_grid_color', self._update_coordinate_grid_color)
+
+    def closeEvent(self, event):
+        self.aladin_widget.close()
+        return super(AladinLiteViewer, self).closeEvent(event)
 
     def add_data(self, data):
 

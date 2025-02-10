@@ -81,6 +81,15 @@ class AladinLiteLayer(LayerArtistBase):
         js = f"{self.catalog_var}.removeAll()"
         self.aladin_widget.run_js(js)
 
+    def remove(self):
+        super(AladinLiteLayer, self).remove()
+        js = f"""
+        console.log({self.catalog_var});
+        aladin.view.removeLayer({self.catalog_var});
+        delete {self.catalog_var};
+        """
+        self.aladin_widget.run_js(js)
+
     def update(self, view=None):
 
         self.clear()

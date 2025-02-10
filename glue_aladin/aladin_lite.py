@@ -1,8 +1,8 @@
-#!/usr/bin/env python
-
 from qtpy import QtWebEngineWidgets
 from qtpy.QtWebEngineWidgets import QWebEnginePage, QWebEngineView
 from qtpy.QtWidgets import QWidget, QVBoxLayout
+
+from glue_qt.utils import get_qapp
 
 ALADIN_LITE_HTML = """
 <html>
@@ -47,10 +47,25 @@ class AladinWebEnginePage(QWebEnginePage):
     def javaScriptConsoleMessage(self, level, message, line_number, source_id):
         print(f"JavaScript console message: {message} (level: {level}, line: {line_number}, source: {source_id})")
 
+    def _process_js_response(self, result):
+        self._js_response_received = True
+        self._js_response = result
+
+    def runJavaScript(self, code):
+        app = get_qapp()
+        self._js_response_received = False
+        self._js_response = None
+        super(AladinWebEnginePage, self).runJavaScript(code, self._process_js_response)
+
+        while not self._js_response_received:
+            app.processEvents()
+
+        return self._js_response
+
 
 class AladinLiteQtWidget(QWidget):
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, block_until_ready=False, *args, **kwargs):
         super(AladinLiteQtWidget, self).__init__(*args, **kwargs)
         web = QWebEngineView()
         layout = QVBoxLayout()
@@ -62,10 +77,20 @@ class AladinLiteQtWidget(QWidget):
         self.web = web
         self.page = web.page()
 
+        if block_until_ready:
+            app = get_qapp()
+            aladin = None
+            while aladin is None:
+                self.run_js("aladin")
+                app.processEvents()
+                aladin = self.page._js_response
+                print(aladin)
+
+
     def run_js(self, js, callback=None):
         print("Running javascript: " + js)
         # js = f"window.aladinPromise.then(() => {{ {js} }})"
         if callback:
-            self.page.runJavaScript(js, 0, callback)
+            return self.page.runJavaScript(js, 0, callback)
         else:
-            self.page.runJavaScript(js)
+            return self.page.runJavaScript(js)
