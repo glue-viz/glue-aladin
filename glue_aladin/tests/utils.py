@@ -4,5 +4,4 @@ def assert_js_result_satisfies(aladin_widget, js, condition):
 
 
 def assert_js_result_equals(aladin_widget, js, expected):
-    print(expected)
     assert_js_result_satisfies(aladin_widget, js, lambda result: result == expected)
