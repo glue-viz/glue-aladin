@@ -3,8 +3,9 @@ from time import sleep
 from glue_qt.app import GlueApplication
 from glue.core import Data
 from numpy import allclose
+from glue_aladin.layer_state import AladinLiteLayerState
 
-from glue_aladin.tests.utils import assert_js_result_satisfies
+from glue_aladin.tests.utils import assert_js_result_equals, assert_js_result_satisfies
 
 from ..data_viewer import AladinLiteViewer
 
@@ -33,6 +34,39 @@ class TestAladinLiteViewer(object):
         self.viewer.state.dec_att = self.d.id["dec"]
         assert len(self.viewer.state.layers) == 1
         assert self.viewer.state.layers[0].layer is self.d
+
+    def test_catalog_color(self):
+        self.viewer.add_data(self.d)
+        layer_state = self.viewer.layers[0].state
+        for color in ("#002244", "#C60C30", "#B0B7BC"):
+            layer_state.color = color
+            assert_js_result_equals(
+                self.viewer.aladin_widget,
+                "aladin.view.catalogs[0].color",
+                color
+            )
+
+    def test_catalog_size(self):
+        self.viewer.add_data(self.d)
+        layer_state = self.viewer.layers[0].state
+        for size in (1, 2, 3, 5, 7, 9, 10, 15):
+            layer_state.size = size
+            assert_js_result_equals(
+                self.viewer.aladin_widget,
+                "aladin.view.catalogs[0].sourceSize",
+                size
+            )
+
+    def test_catalog_shape(self):
+        self.viewer.add_data(self.d)
+        layer_state = self.viewer.layers[0].state
+        for shape in AladinLiteLayerState.shape.get_choices(layer_state):
+            layer_state.shape = shape
+            assert_js_result_equals(
+                self.viewer.aladin_widget,
+                "aladin.view.catalogs[0].shape",
+                shape
+            )
 
     def test_center(self):
         self.viewer.add_data(self.d)
