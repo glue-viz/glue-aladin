@@ -1,4 +1,6 @@
-def setup():
-    from .data_viewer import AladinLiteViewer
-    from glue.config import qt_client
-    qt_client.add(AladinLiteViewer)
+from .qt import setup as qt_setup
+
+try:
+    qt_setup()
+except ImportError:
+    pass
