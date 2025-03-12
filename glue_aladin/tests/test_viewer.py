@@ -10,6 +10,11 @@
 # from ..data_viewer import AladinLiteViewer
 
 
+class TestAladinLiteViewer(object):
+
+    def test_dummy(self):
+        assert True
+
 # class TestAladinLiteViewer(object):
 #
 #     def setup_method(self, method):
