@@ -4,7 +4,7 @@ from glue.viewers.common.state import LayerState
 from echo import CallbackProperty, SelectionCallbackProperty, keep_in_sync
 
 
-class AladinLiteLayerState(LayerState):
+class AladinLiteCatalogLayerState(LayerState):
 
     color = CallbackProperty()
     alpha = CallbackProperty()
@@ -15,7 +15,7 @@ class AladinLiteLayerState(LayerState):
 
     def __init__(self, **kwargs):
 
-        super(AladinLiteLayerState, self).__init__(**kwargs)
+        super(AladinLiteCatalogLayerState, self).__init__(**kwargs)
 
         self._sync_color = None
         self._sync_alpha = None

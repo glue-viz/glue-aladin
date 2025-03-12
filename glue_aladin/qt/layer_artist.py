@@ -8,7 +8,7 @@ from glue.utils import nonpartial
 
 from numpy import isfinite
 
-from glue_aladin.layer_state import AladinLiteLayerState
+from glue_aladin.common.catalog_layer_state import AladinLiteCatalogLayerState
 from glue_aladin.utils import center_fov, color_to_hex
 
 __all__ = ['AladinLiteLayer']
@@ -18,7 +18,7 @@ __all__ = ['AladinLiteLayer']
 # when inheriting from `LayerArtist`. Figure out why
 class AladinLiteLayer(LayerArtistBase):
 
-    _layer_state_cls = AladinLiteLayerState
+    _layer_state_cls = AladinLiteCatalogLayerState
 
     def __init__(self, layer, aladin_widget, viewer_state):
         self._id = uuid4().hex
@@ -27,7 +27,7 @@ class AladinLiteLayer(LayerArtistBase):
         self.viewer_state = viewer_state
         self.viewer_state.add_callback('ra_att', nonpartial(self.update))
         self.viewer_state.add_callback('dec_att', nonpartial(self.update))
-        self.state = AladinLiteLayerState(layer=layer)
+        self.state = AladinLiteCatalogLayerState(layer=layer)
         self.state.add_callback('color', self._update_color)
         self.state.add_callback('alpha', self._update_color)
         self.state.add_callback('shape', self._update_shape)

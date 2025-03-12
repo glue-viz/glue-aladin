@@ -3,11 +3,11 @@ from glue.core import message as msg
 from glue_qt.viewers.common.data_viewer import DataViewer
 from glue_qt.viewers.common.toolbar import BasicToolbar
 
-from glue_aladin.aladin_lite import AladinLiteQtWidget
-from glue_aladin.catalog_layer_widget import AladinLiteCatalogOptionsPanel
-from glue_aladin.viewer_state import AladinLiteState
-from glue_aladin.options_widget import AladinLiteOptionsPanel
-from glue_aladin.layer_artist import AladinLiteLayer
+from glue_aladin.common.viewer_state import AladinLiteState
+from glue_aladin.qt.aladin_lite import AladinLiteQtWidget
+from glue_aladin.qt.catalog_layer_widget import AladinLiteCatalogOptionsPanel
+from glue_aladin.qt.options_widget import AladinLiteOptionsPanel
+from glue_aladin.qt.layer_artist import AladinLiteLayer
 
 
 class AladinLiteViewer(DataViewer):
